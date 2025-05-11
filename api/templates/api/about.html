@@ -1,0 +1,55 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>About Us</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% tailwind_css %}
+  </head>
+
+  <body class="bg-gray-100 text-gray-800 text-center">
+    <!-- Navbar -->
+    <nav class="bg-gray-900 text-white">
+      <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <ul class="flex gap-x-4">
+          <li>
+            <a href="/home" class="hover:text-blue-400">Home</a>
+          </li>
+          <li>
+            <a href="/about" class="hover:text-blue-400">About</a>
+          </li>
+          <li>
+            <a href="/location" class="hover:text-blue-400">Location</a>
+          </li>
+          <li>
+            <a href="/" class="text-gray-500 cursor-not-allowed">Disabled</a>
+          </li>
+        </ul>
+        <ul class="flex space-x-4">
+          {% if user.is_authenticated %}
+            <!-- :contentReference[oaicite:5]{index=5} -->
+            {% if user.profile.profile_picture %}
+              <li>
+                <a href="{% url 'profile' %}"><img src="{{ user.profile.profile_picture.url }}" alt="รูปโปรไฟล์" class="w-10 h-10 rounded-full object-cover border border-gray-300" /></a>
+              </li>
+            {% else %}
+              <li>
+                <a href="{% url 'profile' %}"><img src="/media/profile.jpg" alt="default" class="w-10 h-10 rounded-full object-cover border border-gray-300" /></a>
+              </li>
+            {% endif %}
+          {% else %}
+            <!-- แสดงปุ่ม Login / Sign up เมื่อยังไม่ล็อกอิน -->
+            <li>
+              <a href="{% url 'login' %}" class="border px-4 py-1 rounded hover:bg-white hover:text-gray-900">Login</a>
+            </li> <!-- :contentReference[oaicite:6]{index=6} -->
+            <li>
+              <a href="{% url 'signup' %}" class="border px-4 py-1 rounded hover:bg-white hover:text-gray-900">Sign up</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+    <h1 class="text-3xl font-bold text-blue-600 mb-6">สวัสดีจาก Tailwind!</h1>
+    <a href="/home" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">กดปุ่มนี้</a>
+  </body>
+</html>

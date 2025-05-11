@@ -1,0 +1,118 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Boat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% tailwind_css %}
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <!-- Header -->
+    <div class="bg-blue-600 text-white text-center py-8">
+      <h1 class="text-4xl font-bold">My Home Page</h1>
+      <p class="text-lg">Resize this responsive page to see the effect!</p>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="bg-gray-900 text-white">
+      <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <ul class="flex gap-x-4">
+          <li>
+            <a href="/home" class="hover:text-blue-400">Home</a>
+          </li>
+          <li>
+            <a href="/about" class="hover:text-blue-400">About</a>
+          </li>
+          <li>
+            <a href="/location" class="hover:text-blue-400">Location</a>
+          </li>
+          <li>
+            <a href="/" class="text-gray-500 cursor-not-allowed">Disabled</a>
+          </li>
+        </ul>
+        <ul class="flex space-x-4">
+          {% if user.is_authenticated %}
+            {% if user.profile.profile_picture %}
+              <li>
+                <a href="{% url 'profile' %}"><img src="{{ user.profile.profile_picture.url }}" alt="รูปโปรไฟล์" class="w-10 h-10 rounded-full object-cover border border-gray-300" /></a>
+              </li>
+            {% else %}
+              <li>
+                <a href="{% url 'profile' %}"><img src="/media/profile.jpg" alt="default" class="w-10 h-10 rounded-full object-cover border border-gray-300" /></a>
+              </li>
+            {% endif %}
+          {% else %}
+            <!-- แสดงปุ่ม Login / Sign up เมื่อยังไม่ล็อกอิน -->
+            <li>
+              <a href="{% url 'login' %}" class="border px-4 py-1 rounded hover:bg-white hover:text-gray-900">Login</a>
+            </li> <!-- :contentReference[oaicite:6]{index=6} -->
+            <li>
+              <a href="{% url 'signup' %}" class="border px-4 py-1 rounded hover:bg-white hover:text-gray-900">Sign up</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="max-w-7xl mx-auto p-4 mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Sidebar -->
+      <div class="md:col-span-1 space-y-4">
+        <div>
+          <h2 class="text-xl font-semibold">About Me</h2>
+          <p class="text-sm text-gray-600">Photo of me:</p>
+          <div class="bg-gray-300 h-40 flex items-center justify-center">Fake Image</div>
+          <p class="mt-2">Some text about me in culpa qui officia deserunt mollit anim..</p>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-semibold mt-6">Some Links</h3>
+          <p class="text-sm text-gray-600">Lorem ipsum dolor sit ame.</p>
+          <ul class="space-y-2 mt-2">
+            <li>
+              <a href="/home" class="text-blue-500 hover:underline">Home</a>
+            </li>
+            <li>
+              <a href="/about" class="text-blue-500 hover:underline">About</a>
+            </li>
+            <li>
+              <a href="/location" class="text-blue-500 hover:underline">Location</a>
+            </li>
+            <li>
+              <a href="/" class="text-gray-400 cursor-not-allowed">Disabled</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="md:col-span-2 space-y-8">
+        <div>
+          <h2 class="text-2xl font-bold">TITLE HEADING</h2>
+          <h5 class="text-gray-600">Title description, Dec 7, 2020</h5>
+          <div class="bg-gray-300 h-40 mt-2 flex items-center justify-center">Fake Image</div>
+          <p class="mt-2 text-gray-700">Some text..</p>
+          <p class="text-sm mt-1 text-gray-600">Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+        </div>
+
+        <div>
+          <h2 class="text-2xl font-bold">TITLE HEADING</h2>
+          <h5 class="text-gray-600">Title description, Sep 2, 2020</h5>
+          <div class="bg-gray-300 h-40 mt-2 flex items-center justify-center">Fake Image</div>
+          <p class="mt-2 text-gray-700">Some text..</p>
+          <p class="text-sm mt-1 text-gray-600">Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-center text-sm text-white mt-8 p-4">
+      <p>
+        Author: {{ user.username }}<br>
+        <a href="mailto:pirachat.ku@gmail.com?subject=Qustion" class="text-blue-500">Contact Us</a>
+      </p>
+    </footer>
+  </body>
+</html>

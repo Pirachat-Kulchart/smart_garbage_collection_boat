@@ -1,0 +1,147 @@
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Boat Status</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% tailwind_css %}
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <!-- Navbar -->
+    <nav class="bg-gray-900 text-white">
+      <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <ul class="flex gap-x-4">
+          <li>
+            <a href="/home" class="hover:text-blue-400">Home</a>
+          </li>
+          <li>
+            <a href="/about" class="hover:text-blue-400">About</a>
+          </li>
+          <li>
+            <a href="/location" class="hover:text-blue-400">Location</a>
+          </li>
+          <li>
+            <a href="/" class="text-gray-500 cursor-not-allowed">Disabled</a>
+          </li>
+        </ul>
+        <ul class="flex space-x-4">
+          {% if user.is_authenticated %}
+            <li class="relative">
+              <!-- รูปโปรไฟล์ -->
+              <a href="{% url 'profile' %}">
+                <img src="{% if user.profile.profile_picture %}
+                    {{ user.profile.profile_picture.url }}
+                  {% else %}
+                    
+                    
+                    /media/profile.jpg
+
+
+                  {% endif %}"
+                  alt="profile"
+                  class="w-10 h-10 rounded-full object-cover border border-gray-300 cursor-pointer" />
+              </a>
+
+              <!-- ปุ่ม Down Arrow ข้างๆ รูปโปรไฟล์ -->
+              <button class="bg-transparent text-black hover:text-blue-500 focus:outline-none relative group">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+
+              <!-- เมนู Dropdown -->
+              <ul class="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded shadow-lg opacity-0 group-hover:opacity-100 visible group-hover:visible transition-all duration-300 ease-in-out hidden">
+                <li>
+                  <a href="{% url 'profile' %}" class="block px-4 py-2 hover:bg-gray-100 text-black">My Profile</a>
+                </li>
+                <li>
+                  <a href="{% url 'logout' %}" class="block px-4 py-2 hover:bg-gray-100 text-black">Logout</a>
+                </li>
+              </ul>
+            </li>
+          {% else %}
+            <li>
+              <a href="{% url 'login' %}" class="border px-4 py-1 rounded hover:bg-white hover:text-blue-500">Login</a>
+            </li>
+            <li>
+              <a href="{% url 'signup' %}" class="border px-4 py-1 rounded hover:bg-white hover:text-blue-500">Sign up</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="flex-1 flex items-center justify-center">
+      <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md mx-3 my-10">
+        <h1 class="text-center text-4xl pb-10 font-bold text-gray-800 mb-6">Boat Status</h1>
+
+        <!-- Boat Status Information -->
+        <div class="mb-4">
+          <h2 class="text-2xl font-semibold text-gray-700">Current Boat Status</h2>
+          <div class="mt-4">
+            {% if error_message %}
+              <p class="text-red-500 font-semibold">{{ error_message }}</p>
+            {% endif %}
+            {% if boat_status %}
+              {% load tz %}
+              <p>
+                <strong>Timestamp:</strong> {{ boat_status.timestamp|localtime }}
+              </p>
+              <p>
+                <strong>Registered Name:</strong> {{ boat_status.name }}
+              </p>
+              <p>
+                <strong>Mode:</strong> {{ boat_status.mode }}
+              </p>
+              <p>
+                <strong>Speed:</strong> {{ boat_status.speed }} m/h
+              </p>
+              <p>
+                <strong>Direction:</strong> {{ boat_status.heading }}°
+              </p>
+              <p>
+                <strong>Battery:</strong> {{ boat_status.battery }}%
+              </p>
+              <p>
+                <strong>Location:</strong> ({{ boat_status.lat }}, {{ boat_status.lon }})
+              </p>
+              <p>
+                <strong>Status:</strong> {{ boat_status.status }}
+              </p>
+              <p>
+                <strong>Message:</strong> {{ boat_status.message }}
+              </p>
+            {% elif boat is not None %}
+              <div class="mt-4 p-4 bg-white shadow rounded text-red-500">
+                <p>ไม่พบเรือที่มีชื่อ "{{ request.POST.boat }}"</p>
+              </div>
+            {% endif %}
+            {% if list_boats %}
+              <h2>All Boats</h2>
+              <ul>
+                {% for boat in api %}
+                  <li>{{ boat }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+
+        <form method="post" class="">
+          {% csrf_token %}
+          <strong><label for="boat" class="text-gray-700">Command</label></strong><br />
+          <input type="text" id="boat" name="boat" class="border border-gray-300 rounded px-2 py-1" placeholder="Enter Boat ID/Name" required />
+
+          <button type="submit" name="action" value="boat_status" class="bg-blue-500 text-white px-2 py-2 rounded">Get Status</button>
+          <button type="submit" name="action" value="list_boats" class="bg-blue-500 text-white px-3 py-2 rounded">List Boat</button>
+        </form>
+
+        <a href="/home" class="mt-6 block text-right text-blue-500 hover:text-blue-700">Back to Home</a>
+      </div>
+    </div>
+  </body>
+</html>

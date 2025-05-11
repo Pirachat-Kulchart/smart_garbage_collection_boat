@@ -1,0 +1,72 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Boat Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% tailwind_css %}
+  </head>
+
+  <body class="bg-gray-100 text-gray-800">
+    <!-- Navbar -->
+    <nav class="bg-gray-900 text-white">
+      <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <ul class="flex gap-x-4">
+          <li>
+            <a href="/home" class="hover:text-blue-400">Home</a>
+          </li>
+          <li>
+            <a href="/about" class="hover:text-blue-400">About</a>
+          </li>
+          <li>
+            <a href="/location" class="hover:text-blue-400">Location</a>
+          </li>
+          <li>
+            <a href="/" class="text-gray-500 cursor-not-allowed">Disabled</a>
+          </li>
+        </ul>
+        <ul class="flex space-x-4">
+          <li>
+            <a href="/login" class="border px-4 py-1 rounded hover:bg-white hover:text-gray-900">Login</a>
+          </li>
+          <li>
+            <a href="/signup" class="border px-4 py-1 rounded hover:bg-white hover:text-gray-900">Sign up</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- content -->
+    <div class="flex-1 flex items-center justify-center">
+      <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md mx-3 my-10">
+        <h1 class="text-center text-4xl pb-10 font-bold text-gray-800 mb-6">Login</h1>
+
+        {% if messages %}
+          <ul class="mb-4">
+            {% for message in messages %}
+              <li class="{% if message.tags %}
+                  text-{{ message.tags }}-500
+                {% endif %}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        <!-- Login Form -->
+        <form method="POST" action="{% url 'login' %}">
+          {% csrf_token %}
+          <label for="username" class="block text-gray-700 text-lg font-semibold mb-2">Username</label>
+          <input type="text" id="username" name="username" placeholder="Type your username" class="w-full px-4 py-2 mb-8 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300" required />
+
+          <label for="password" class="block text-gray-700 text-lg font-semibold mb-2">Password</label>
+          <input type="password" id="password" name="password" placeholder="Type your password" class="w-full px-4 py-2 mb-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300" required />
+
+          <button type="submit" class="w-full mb-10 h-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl mt-6 transition duration-300">Login</button>
+        </form>
+
+        <div class="text-center">
+          <p class="mb-5">Or Sign Up Using</p>
+          <a class="hover:text-blue-400" href="/signup">SIGN UP</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
