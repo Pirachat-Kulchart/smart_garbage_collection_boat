@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework import status, generics, permissions
 from django.shortcuts import render, redirect
+from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as auth_login
@@ -177,20 +178,3 @@ def get_status(request):
         'error_message': error_message,
     })
 
-# def post_status(request):
-#     if request.method == 'GET':
-#         # 1. รับค่าจากฟอร์ม
-#         lat = request.get('lat')
-#         lon = request.POST.get('lon')
-#         mode = request.POST.get('mode')
-#         speed = request.POST.get('speed')
-#         heading = request.POST.get('heading')
-#         battery = request.POST.get('battery')
-#         source = request.POST.get('source')
-#         message = request.POST.get('message')
-
-#         # 2. บันทึกข้อมูลลงฐานข้อมูล
-#         boat_status = BoatStatus(
-#             lat=lat, lon=lon, mode=mode, speed=speed, heading=heading, battery=battery, source=source, message=message)
-#         boat_status.save()
-#     return render(request, 'api/status.html')
