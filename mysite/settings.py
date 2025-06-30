@@ -26,9 +26,6 @@ SECRET_KEY = 'django-insecure-z-78ym%m#3ls#neu9w1)*x(lx%n2o+hsl_15mpp5h9y8o#bpmc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -61,6 +58,9 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'mysite.urls'
 
 LOGOUT_REDIRECT_URL = '/login/'
+
+# ALLOWED_HOSTS = ['192.168.121.38',
+#                  "http://localhost:8000", "http://127.0.0.1:8000"]
 
 # ตั้งค่า CORS
 CORS_ALLOWED_ORIGINS = [

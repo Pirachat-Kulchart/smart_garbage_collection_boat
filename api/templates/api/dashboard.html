@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Arrow Button Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer>
+      document.addEventListener('DOMContentLoaded', () => {
+        const box = document.getElementById('box1')
+        let x = 0
+        let y = 0
+        const step = 20
+      
+        document.getElementById('up').addEventListener('click', () => {
+          y -= step
+          box.style.transform = `translate(${x}px, ${y}px)`
+        })
+      
+        document.getElementById('down').addEventListener('click', () => {
+          y += step
+          box.style.transform = `translate(${x}px, ${y}px)`
+        })
+      
+        document.getElementById('left').addEventListener('click', () => {
+          x -= step
+          box.style.transform = `translate(${x}px, ${y}px)`
+        })
+      
+        document.getElementById('right').addEventListener('click', () => {
+          x += step
+          box.style.transform = `translate(${x}px, ${y}px)`
+        })
+
+        document.getElementById('space').addEventListener('click', () => {
+          x = 0
+          y = 0
+          box.style.transform = `translate(${x}px, ${y}px)`
+        })
+      })
+    </script>
+  </head>
+  <body class="bg-gray-100 h-screen overflow-hidden">
+    <!-- กล่องควบคุม -->
+    <div class="relative w-full h-full">
+      <!-- กล่องที่ควบคุมได้ -->
+      <div id="box1" class="absolute top-0 left-0 w-[200px] h-[150px] bg-blue-500 text-white flex items-center justify-center transition-transform duration-100">พื้นที่แรก</div>
+
+      <!-- ปุ่มควบคุม -->
+      <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 space-y-2 bg-red-500 p-4 rounded-full shadow-lg">
+        <!-- ปุ่มบน -->
+        <div class="flex justify-center">
+          <button id="up" class="w-12 h-12 bg-gray-800 text-white rounded-full">↑</button>
+        </div>
+        <!-- ปุ่มซ้าย ขวา ล่าง -->
+        <div class="flex justify-center space-x-4">
+          <button id="left" class="w-12 h-12 bg-gray-800 text-white rounded-full">←</button>
+          <button id="space" class="w-12 h-12 bg-gray-800 text-white rounded-full"> </button>
+          <button id="right" class="w-12 h-12 bg-gray-800 text-white rounded-full">→</button>
+        </div>
+        <div class="flex justify-center space-x-4">
+        <button id="down" class="w-12 h-12 bg-gray-800 text-white rounded-full">↓</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

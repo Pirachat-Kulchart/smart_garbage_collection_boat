@@ -11,63 +11,47 @@
   </head>
   <body class="bg-gray-100 text-gray-800">
     <!-- Navbar -->
+    <!-- Navbar -->
     <nav class="bg-gray-900 text-white">
       <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-        <ul class="flex gap-x-4">
+        <ul class="flex space-x-4">
           <li>
             <a href="/home" class="hover:text-blue-400">Home</a>
           </li>
           <li>
             <a href="/about" class="hover:text-blue-400">About</a>
           </li>
+          {% if user.is_authenticated %}
           <li>
             <a href="/location" class="hover:text-blue-400">Location</a>
           </li>
           <li>
-            <a href="/" class="text-gray-500 cursor-not-allowed">Disabled</a>
+            <a href="/status" class="hover:text-blue-400">Boat Status</a>
           </li>
+          {% endif %}
+          {% comment %} <li>
+            <a href="#" class="text-gray-500 cursor-not-allowed">Disabled</a>
+          </li> {% endcomment %}
         </ul>
         <ul class="flex space-x-4">
           {% if user.is_authenticated %}
-            <li class="relative">
-              <!-- รูปโปรไฟล์ -->
-              <a href="{% url 'profile' %}">
-                <img src="{% if user.profile.profile_picture %}
-                    {{ user.profile.profile_picture.url }}
-                  {% else %}
-                    
-                    
-                    /media/profile.jpg
-
-
-                  {% endif %}"
-                  alt="profile"
-                  class="w-10 h-10 rounded-full object-cover border border-gray-300 cursor-pointer" />
-              </a>
-
-              <!-- ปุ่ม Down Arrow ข้างๆ รูปโปรไฟล์ -->
-              <button class="bg-transparent text-black hover:text-blue-500 focus:outline-none relative group">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </button>
-
-              <!-- เมนู Dropdown -->
-              <ul class="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded shadow-lg opacity-0 group-hover:opacity-100 visible group-hover:visible transition-all duration-300 ease-in-out hidden">
-                <li>
-                  <a href="{% url 'profile' %}" class="block px-4 py-2 hover:bg-gray-100 text-black">My Profile</a>
-                </li>
-                <li>
-                  <a href="{% url 'logout' %}" class="block px-4 py-2 hover:bg-gray-100 text-black">Logout</a>
-                </li>
-              </ul>
-            </li>
+            <!-- :contentReference[oaicite:5]{index=5} -->
+            {% if user.profile.profile_picture %}
+              <li>
+                <a href="{% url 'profile' %}"><img src="{{ user.profile.profile_picture.url }}" alt="รูปโปรไฟล์" class="w-10 h-10 rounded-full object-cover border border-gray-300" /></a>
+              </li>
+            {% else %}
+              <li>
+                <a href="{% url 'profile' %}"><img src="/media/profile.jpg" alt="default" class="w-10 h-10 rounded-full object-cover border border-gray-300" /></a>
+              </li>
+            {% endif %}
           {% else %}
+            <!-- แสดงปุ่ม Login / Sign up เมื่อยังไม่ล็อกอิน -->
             <li>
-              <a href="{% url 'login' %}" class="border px-4 py-1 rounded hover:bg-white hover:text-blue-500">Login</a>
-            </li>
+              <a href="{% url 'login' %}" class="border px-4 py-1 rounded hover:bg-white hover:text-gray-900">Login</a>
+            </li> <!-- :contentReference[oaicite:6]{index=6} -->
             <li>
-              <a href="{% url 'signup' %}" class="border px-4 py-1 rounded hover:bg-white hover:text-blue-500">Sign up</a>
+              <a href="{% url 'signup' %}" class="border px-4 py-1 rounded hover:bg-white hover:text-gray-900">Sign up</a>
             </li>
           {% endif %}
         </ul>
@@ -121,10 +105,11 @@
               </div>
             {% endif %}
             {% if list_boats %}
-              <h2>All Boats</h2>
-              <ul>
-                {% for boat in api %}
-                  <li>{{ boat }}</li>
+              <h2 class="text-xl font-semibold mt-4 mb-2">All Boats</h2>
+              <h3>name - status</h3>
+              <ul class="list-disc pl-5">
+                {% for boat in list_boats %}
+                  <li>{{ boat.name }} - {{ boat.status }}</li>
                 {% endfor %}
               </ul>
             {% endif %}
@@ -134,10 +119,11 @@
         <form method="post" class="">
           {% csrf_token %}
           <strong><label for="boat" class="text-gray-700">Command</label></strong><br />
-          <input type="text" id="boat" name="boat" class="border border-gray-300 rounded px-2 py-1" placeholder="Enter Boat ID/Name" required />
-
-          <button type="submit" name="action" value="boat_status" class="bg-blue-500 text-white px-2 py-2 rounded">Get Status</button>
-          <button type="submit" name="action" value="list_boats" class="bg-blue-500 text-white px-3 py-2 rounded">List Boat</button>
+          <input type="text" id="boat" name="boat" class="border border-gray-300 rounded px-2 py-1 mb-5" placeholder="Enter Boat ID/Name" required />
+          {% comment %} <div class="text-gray-500 text-sm mb-2">Enter the boat name to get its status.</div> {% endcomment %}
+          {% comment %} <div class="text-gray-500 text-sm mb-2">Leave empty to list all boats.</div> {% endcomment %}
+          <button type="submit" name="action" value="boat_status" onclick="document.getElementById('boat').required = true" class="bg-blue-500 text-white px-3 py-2 rounded">Get Status</button>
+          <button type="submit" name="action" value="list_boats" onclick="document.getElementById('boat').required = false" class="bg-blue-500 text-white px-3 py-2 rounded">List Boat</button>
         </form>
 
         <a href="/home" class="mt-6 block text-right text-blue-500 hover:text-blue-700">Back to Home</a>

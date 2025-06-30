@@ -2,9 +2,13 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>About Us</title>
     <script src="https://cdn.tailwindcss.com"></script>
     {% tailwind_css %}
+    {% comment %} <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" /> {% endcomment %}
+    {% comment %} <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> {% endcomment %}
   </head>
 
   <body class="bg-gray-100 text-gray-800 text-center">
@@ -18,12 +22,17 @@
           <li>
             <a href="/about" class="hover:text-blue-400">About</a>
           </li>
-          <li>
-            <a href="/location" class="hover:text-blue-400">Location</a>
-          </li>
-          <li>
+          {% if user.is_authenticated %}
+            <li>
+              <a href="/location" class="hover:text-blue-400">Location</a>
+            </li>
+            <li>
+              <a href="/status" class="hover:text-blue-400">Boat Status</a>
+            </li>
+          {% endif %}
+          {% comment %} <li>
             <a href="/" class="text-gray-500 cursor-not-allowed">Disabled</a>
-          </li>
+          </li> {% endcomment %}
         </ul>
         <ul class="flex space-x-4">
           {% if user.is_authenticated %}
@@ -49,7 +58,94 @@
         </ul>
       </div>
     </nav>
-    <h1 class="text-3xl font-bold text-blue-600 mb-6">สวัสดีจาก Tailwind!</h1>
-    <a href="/home" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">กดปุ่มนี้</a>
+    <section class="max-w-7xl mx-auto px-4 py-1 text-left">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <!-- Contact Form -->
+        <div>
+          <h2 class="text-2xl font-bold mb-6">Contact Us</h2>
+          <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <div>
+              <label for="name" class="block font-semibold">Your name *</label>
+              <input type="text" id="name" name="name" class="w-full border border-gray-300 px-4 py-2 rounded" required />
+            </div>
+
+            <div>
+              <label for="email" class="block font-semibold">Email Address *</label>
+              <input type="email" id="email" name="email" class="w-full border border-gray-300 px-4 py-2 rounded" required />
+            </div>
+
+            <div>
+              <label for="subject" class="block font-semibold">Subject *</label>
+              <input type="text" id="subject" name="subject" class="w-full border border-gray-300 px-4 py-2 rounded" required />
+            </div>
+
+            <div>
+              <label for="message" class="block font-semibold">Message</label>
+              <textarea id="message" name="message" rows="4" class="w-full border border-gray-300 px-4 py-2 rounded"></textarea>
+            </div>
+
+            <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded">SEND MESSAGE</button>
+          </form>
+        </div>
+
+        <!-- Office Info -->
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xl font-bold mb-2 border-b pb-1">Our Office</h3>
+            <p>
+              <strong>📍 Address:</strong> 1234 Street Name, City Name
+            </p>
+            <p>
+              <strong>📞 Phone:</strong> (123) 456-789
+            </p>
+            <p>
+              <strong>📧 Email:</strong> <a href="mailto:mail@example.com" class="text-red-500">mail@example.com</a>
+            </p>
+            <p>
+              <strong>💬 Line ID:</strong> lineid
+            </p>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-bold mb-2 border-b pb-1">Business Hours</h3>
+            <ul class="list-disc list-inside space-y-1">
+              <li>Monday - Friday: 9am to 5pm</li>
+              <li>Saturday: 9am to 2pm</li>
+              <li>Sunday: Closed</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-bold mb-2 border-b pb-1">Social</h3>
+            <ul class="space-y-1">
+              <li>📘 Facebook</li>
+              <li>📺 Youtube</li>
+              <li>🐦 Twitter</li>
+              <li>➕ Google+</li>
+              <li>📸 Instagram</li>
+              <li>💬 Skype</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Google Map -->
+      <div class="mt-10">
+        <iframe src="https://www.google.com/maps/place/Bangkok/@13.7248785,100.4683044,88487m/data=!3m2!1e3!4b1!4m6!3m5!1s0x311d6032280d61f3:0x10100b25de24820!8m2!3d13.7563309!4d100.5017651!16zL20vMGZuMmc?entry=ttu&g_ep=EgoyMDI1MDUxNS4wIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D" width="100%" height="350" class="border-0 w-full rounded shadow" allowfullscreen="" loading="lazy"></iframe>
+        {% comment %} <script>
+          // กำหนดตำแหน่งเริ่มต้น (พิกัดกรุงเทพฯ)
+          var map = L.map('map').setView([13.7563, 100.5018], 13)
+          
+          // เพิ่ม Tile Layer
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+          }).addTo(map)
+          
+          // เพิ่ม Marker
+          L.marker([13.7563, 100.5018]).addTo(map).bindPopup('กรุงเทพฯ').openPopup()
+        </script> {% endcomment %}
+      </div>
+    </section>
   </body>
 </html>

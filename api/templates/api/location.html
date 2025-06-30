@@ -25,12 +25,17 @@
           <li>
             <a href="/about" class="hover:text-blue-400">About</a>
           </li>
-          <li>
-            <a href="/location" class="hover:text-blue-400">Location</a>
-          </li>
-          <li>
+          {% if user.is_authenticated %}
+            <li>
+              <a href="/location" class="hover:text-blue-400">Location</a>
+            </li>
+            <li>
+              <a href="/status" class="hover:text-blue-400">Boat Status</a>
+            </li>
+          {% endif %}
+          {% comment %} <li>
             <a href="#" class="text-gray-500 cursor-not-allowed">Disabled</a>
-          </li>
+          </li> {% endcomment %}
         </ul>
         <ul class="flex space-x-4">
           {% if user.is_authenticated %}
@@ -56,19 +61,23 @@
         </ul>
       </div>
     </nav>
+    {% comment %} <h2>{{lat}}/{{lon}}</h2> {% endcomment %}
     <div id="map"></div>
 
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-      // กำหนดตำแหน่งเริ่มต้น (พิกัดกรุงเทพฯ)
-      var map = L.map('map').setView([13.7563, 100.5018], 13)
+      // รับค่าจาก Django context
+      var lat = parseFloat("{{ lat|default:'13.736717'|floatformat:'6' }}")
+      var lon = parseFloat("{{ lon|default:'100.523186'|floatformat:'6' }}")
       
-      // เพิ่ม Tile Layer
+      var map = L.map('map').setView([lat, lon], 20) // ซูมระดับ x
+      
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
       }).addTo(map)
       
-      // เพิ่ม Marker
-      L.marker([13.7563, 100.5018]).addTo(map).bindPopup('กรุงเทพฯ').openPopup()
+      L.marker([lat, lon]).addTo(map).bindPopup('ตำแหน่งเรือล่าสุด').openPopup()
     </script>
   </body>
 </html>

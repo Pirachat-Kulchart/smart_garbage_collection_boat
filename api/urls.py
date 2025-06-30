@@ -13,11 +13,14 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('location/', views.location, name='location'),
     path('profile/', views.profile, name='profile'),
+    path('dashboard/', views.dashboard, name='dashboard'),
     path('login/', views.login, name='login'),
     path('signup/', views.signUp, name='signup'),
     path('forgotpassword/', views.forgot_password, name='forgot_password'),
     path('status/', views.get_status, name='status'),
     path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
+    
+    path('testPage/', views.testPage, name='testPage'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:

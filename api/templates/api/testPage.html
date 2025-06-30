@@ -1,0 +1,209 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    {% tailwind_css %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Controller</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <nav class="bg-gray-800 text-white p-4 flex justify-between items-center">
+      <div class="flex gap-10">
+        <a href="/home" class="hover:text-blue-400">Home</a>
+        <a href="#" class="hover:text-blue-400">Controller</a>
+      </div>
+      <div class="text-sm text-right">
+        <p>
+          Weather 🌤️ 27°C | Time <span id="current-time">--:--:--</span>
+        </p>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="flex justify-center items-center p-6 grow">
+      <div class="grid grid-cols-3 gap-4 bg-white p-4 rounded-lg shadow max-w-[960px] w-full h-fit">
+        <!-- 1. Video From Camera -->
+        <div class="relative bg-yellow-300 p-4 rounded col-span-2 row-span-2 flex flex-col justify-between text-lg font-semibold">
+          <div class="absolute top-2 right-2 flex gap-2 items-center">
+            <button id="toggle-btn" class="px-3 py-1 rounded font-bold text-white bg-red-500">OFF</button>
+            <span class="text-sm font-normal text-black">⏱️ <span id="camera-timer">00:00:00</span></span>
+          </div>
+          <div class="flex justify-center items-center h-full">1. Video From Camera</div>
+          <div class="absolute bottom-2 right-2 text-sm font-bold text-black">
+            Degree: <span id="tilt-value">{{ boat_status.heading }}°</span>
+          </div>
+        </div>
+
+        <!-- 4. Registered Name -->
+        <!-- 5. Battery, Speed, Temp -->
+        <div class="border p-4 rounded flex flex-col row-span-2">
+          <h2 class="text-sm font-medium mb-2 text-center">Registered Name</h2>
+          <h2 class="text-sm font-medium mb-2">Select Boat</h2>
+          <form method="GET" action="{% url 'testPage' %}" class="flex flex-col">
+            <select name="boat_name" class="border px-2 py-2 mb-4 rounded w-full" onchange="this.form.submit()">
+              <option value="no_option">no option</option>
+              {% for vessels in vessel_user %}
+                {% if vessels and vessel.name == vessels.name %}
+                  <option value="{{ vessels.name }}" selected>{{ vessels.name }}</option>
+                {% else %}
+                  <option value="{{ vessels.name }}">{{ vessels.name }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          </form>
+          <h2 class="text-center mb-2"><strong>Vessel Information</strong></h2>
+          {% comment %} <div class="space-y-1 text-sm mb-4">
+            {% endcomment %}
+            {% if vessel %}
+              <p>
+                <strong>Owner:</strong> {{ vessel.owner }}
+              </p>
+            {% else %}
+              {% if request.GET.boat_name == 'no_option' or vessel == None %}
+                <p class="text-red-600">Please choose vessel in dropdown</p>
+              {% else %}
+                <p class="text-red-600">ไม่พบเรือที่ชื่อ "{{ request.GET.boat_name }}"/ "{{ vessel }}"</p>
+              {% endif %}
+            {% endif %}
+            {% comment %}
+          </div> {% endcomment %}
+          {% comment %} <h2 class="text-sm font-medium mb-2 text-center">Status</h2> {% endcomment %}
+          {% comment %} <div class="space-y-1 text-sm mb-4">
+            {% endcomment %}
+            {% if boat_status %}
+              <p>
+                <strong>Battery:</strong> {{ boat_status.battery }}%
+              </p>
+              <p>
+                <strong>Speed:</strong> {{ boat_status.speed }} m/s
+              </p>
+              <p>
+                <strong>Mode:</strong> {{ boat_status.mode }}
+              </p>
+              {% comment %} <p>
+                <strong>Degree:</strong> {{ boat_status.heading }}°
+              </p> {% endcomment %}
+              <p>
+                <strong>Status:</strong> {{ boat_status.status }}
+              </p>
+            {% endif %}
+            {% comment %}
+          </div> {% endcomment %}
+          {% comment %} <h2 class="text-sm font-medium mb-2 text-center">Mode</h2> {% endcomment %}
+          {% comment %} <div class="space-y-1 text-sm mb-4">
+            {% endcomment %}
+            {% comment %}
+          </div> {% endcomment %}
+        </div>
+
+        <!-- 7. Real-time status -->
+        <div class="border p-4 rounded flex flex-col justify-center text-center">
+          <h2 class="text-sm font-medium">Map/Location</h2>
+          {% if request.GET.boat_name == 'no_option' or vessel == None %}
+            <p class="text-red-600">Please choose vessel in dropdown</p>
+          {% elif boat_status %}
+            <p class="text-xl font-semibold mt-2 text-gray-700">lat: {{ boat_status.lat }}</p>
+            <p class="text-xl font-semibold mt-2 text-gray-700">lon: {{ boat_status.lon }}</p>
+            <p>
+              <a href="/location?lat={{ boat_status.lat }}&lon={{ boat_status.lon }}" class="text-blue-500 hover:underline">View on Map</a>
+            </p>
+          {% else %}
+            <p class="text-xl font-semibold mt-2 text-gray-700">lat: {{ boat_status.lat }}</p>
+            <p class="text-xl font-semibold mt-2 text-gray-700">lon: {{ boat_status.lon }}</p>
+          {% endif %}
+        </div>
+
+        <!-- 8. Command Example -->
+        <div class="border p-4 rounded flex flex-col">
+          <h2 class="text-sm font-medium mb-8 text-center">Command</h2>
+          <div class="space-x-4 justify-center flex">
+            <button id="toggle-am" class="bg-yellow-400 hover:bg-yellow-500 px-4 py-2 rounded font-semibold">Manual</button>
+            {% comment %} <button class="bg-yellow-400 hover:bg-yellow-500 px-4 py-2 rounded font-semibold">Auto</button> {% endcomment %}
+            {% comment %} <button class="bg-yellow-400 hover:bg-yellow-500 px-4 py-2 rounded font-semibold">Manual</button> {% endcomment %}
+            <button id="toggle-wk" class="bg-red-500 hover:bg-red-500 px-4 py-2 rounded font-semibold text-white">Stop</button>
+          </div>
+          {% comment %} <div class="space-x-4 mt-2">
+            {% comment %} <button class="bg-yellow-400 hover:bg-yellow-500 px-4 py-2 rounded font-semibold">Start</button>
+            <button class="bg-yellow-400 hover:bg-yellow-500 px-4 py-2 rounded font-semibold">Stop</button>
+          </div> {% endcomment %}
+        </div>
+
+        <!-- Joystick -->
+        <div class="border p-4 rounded flex flex-col items-center">
+          <div class="space-y-5 text-center">
+            <button class="bg-yellow-400 px-4 py-1 rounded">Forward</button>
+            <div class="space-x-8">
+              <button class="bg-yellow-400 px-4 py-1 rounded">Left</button>
+              <button class="bg-yellow-400 px-4 py-1 rounded">Right</button>
+            </div>
+            <button class="bg-yellow-400 px-4 py-1 rounded">Backward</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // แสดงเวลา
+      function updateTime() {
+        const now = new Date()
+        document.getElementById('current-time').textContent = now.toLocaleTimeString('th-TH')
+      }
+      setInterval(updateTime, 1000)
+      updateTime()
+      
+      // กล้อง: toggle on/off และจับเวลา
+      let isCameraOn = false
+      let timer = 0
+      let interval = null
+      
+      const toggleBtn = document.getElementById('toggle-btn')
+      const toggleAm = document.getElementById('toggle-am')
+      const toggleWk = document.getElementById('toggle-wk')
+      const timerDisplay = document.getElementById('camera-timer')
+      
+      toggleBtn.addEventListener('click', () => {
+        isCameraOn = !isCameraOn
+      
+        if (isCameraOn) {
+          toggleBtn.textContent = 'ON'
+          toggleBtn.classList.remove('bg-red-500')
+          toggleBtn.classList.add('bg-green-500')
+      
+          interval = setInterval(() => {
+            timer++
+            const h = String(Math.floor(timer / 3600)).padStart(2, '0')
+            const m = String(Math.floor((timer % 3600) / 60)).padStart(2, '0')
+            const s = String(timer % 60).padStart(2, '0')
+            timerDisplay.textContent = `${h}:${m}:${s}`
+          }, 1000)
+        } else {
+          toggleBtn.textContent = 'OFF'
+          toggleBtn.classList.remove('bg-green-500')
+          toggleBtn.classList.add('bg-red-500')
+      
+          clearInterval(interval)
+          timer = 0
+          timerDisplay.textContent = '00:00:00'
+        }
+      })
+      toggleWk.addEventListener('click', () => {
+        toggleWk.classList.toggle('bg-red-500')
+        toggleWk.classList.toggle('bg-green-500')
+        toggleWk.textContent = toggleWk.textContent === 'Stop' ? 'Start' : 'Stop'
+        if (toggleWk.textContent === 'Start') {
+          toggleWk.classList.remove('hover:bg-red-500')
+          toggleWk.classList.add('hover:bg-green-500')
+        } else {
+          toggleWk.classList.remove('hover:bg-green-500')
+          toggleWk.classList.add('hover:bg-red-500')
+        }
+      })
+      toggleAm.addEventListener('click', () => {
+        toggleAm.textContent = toggleAm.textContent === 'Manual' ? 'Auto' : 'Manual'
+      })
+    </script>
+  </body>
+</html>
