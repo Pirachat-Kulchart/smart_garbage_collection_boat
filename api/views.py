@@ -15,7 +15,7 @@ from .models import BoatStatus, Vessel, SensorData, SystemStatus, VideoStream
 from django.contrib.auth.models import User
 from .serializers import BoatStatusSerializer
 from django.shortcuts import render, get_object_or_404, redirect
-
+from django.http import HttpResponse
 
 def testPage(request):
     # ดึงค่าจาก GET
@@ -279,3 +279,12 @@ def get_status(request):
 
 def dashboard(request):
     return render(request, 'api/dashboard.html')  # แสดงหน้า dashboard.html
+
+# ตัวอย่างการใช้งาน ngrok-skip-browser-warning header
+def my_view(request):
+    skip_warning = request.headers.get('ngrok-skip-browser-warning')
+    if skip_warning == 'true':
+        # ทำอะไรกับ request ที่มี header นี้ เช่น log หรือข้าม check บางอย่าง
+        return HttpResponse("Received ngrok skip warning header!")
+    else:
+        return HttpResponse("Normal request")

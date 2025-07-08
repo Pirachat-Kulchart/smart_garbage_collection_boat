@@ -53,6 +53,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_browser_reload.middleware.BrowserReloadMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'api.middleware.NgrokSkipWarningMiddleware'
 ]
 
 ROOT_URLCONF = 'mysite.urls'
