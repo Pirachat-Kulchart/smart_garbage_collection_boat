@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -56,11 +56,17 @@ MIDDLEWARE = [
     'api.middleware.NgrokSkipWarningMiddleware'
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://f2d9faf29acc.ngrok-free.app",
+    # หรือถ้ามีหลายโดเมนก็ใส่เพิ่มได้ เช่น
+    # "https://your-other-domain.com",
+]
+
 ROOT_URLCONF = 'mysite.urls'
 
 LOGOUT_REDIRECT_URL = '/login/'
 
-ALLOWED_HOSTS = ['192.168.121.38', "http://localhost:8000",
+ALLOWED_HOSTS = ['*', '192.168.121.38', "http://localhost:8000",
                  "http://127.0.0.1:8000", '.ngrok-free.app']
 
 # ตั้งค่า CORS
@@ -142,7 +148,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+# เพิ่มบรรทัดนี้ เพื่อระบุโฟลเดอร์ที่จะเก็บ static files ที่ collect มา
+STATIC_ROOT = os.path.join(BASE_DIR, 'theme', 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
