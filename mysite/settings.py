@@ -59,8 +59,8 @@ ROOT_URLCONF = 'mysite.urls'
 
 LOGOUT_REDIRECT_URL = '/login/'
 
-# ALLOWED_HOSTS = ['192.168.121.38',
-#                  "http://localhost:8000", "http://127.0.0.1:8000"]
+ALLOWED_HOSTS = ['192.168.121.38', "http://localhost:8000",
+                 "http://127.0.0.1:8000", '.ngrok-free.app']
 
 # ตั้งค่า CORS
 CORS_ALLOWED_ORIGINS = [
