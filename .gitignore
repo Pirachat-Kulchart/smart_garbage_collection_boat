@@ -1,0 +1,15 @@
+ros2_ws/build/.built_by
+ros2_ws/build/COLCON_IGNORE
+ros2_ws/install/_local_setup_util_bat.py
+ros2_ws/install/_local_setup_util_ps1.py
+ros2_ws/install/.colcon_install_layout
+ros2_ws/install/COLCON_IGNORE
+ros2_ws/install/local_setup.bat
+ros2_ws/install/local_setup.ps1
+ros2_ws/install/setup.bat
+ros2_ws/install/setup.ps1
+ros2_ws/log/COLCON_IGNORE
+ros2_ws/log/latest
+ros2_ws/log/latest_build
+ros2_ws/log/build_2025-06-30_10-47-53/events.log
+ros2_ws/log/build_2025-06-30_10-47-53/logger_all.log
