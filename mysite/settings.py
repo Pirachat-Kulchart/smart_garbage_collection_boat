@@ -153,6 +153,10 @@ STATIC_URL = '/static/'
 # เพิ่มบรรทัดนี้ เพื่อระบุโฟลเดอร์ที่จะเก็บ static files ที่ collect มา
 STATIC_ROOT = os.path.join(BASE_DIR, 'theme', 'staticfiles')
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'theme', 'static'),  # ที่คุณเก็บ CSS, JS, รูป
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
