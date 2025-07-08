@@ -1,11 +1,12 @@
 {% load static tailwind_tags %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/output.css' %}">
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>About Us</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     {% tailwind_css %}
     {% comment %} <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" /> {% endcomment %}
     {% comment %} <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> {% endcomment %}
